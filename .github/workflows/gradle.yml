@@ -1,6 +1,6 @@
 name: Java CI with Gradle
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   build:
@@ -22,6 +22,11 @@ jobs:
         # & означает, что в фоновом режиме не блокируем терминал для запуска тестов,
         # обязательно должен быть для запуска SUT в CI
         run: java -jar ./artifacts/app-mbank.jar &
+      - name: Wait for application to start
+        run: |
+          echo "Waiting for application to start..."
+          sleep 10
+          curl -f http://localhost:9999 || exit 1
       - name: Build with Gradle
         # Запускаем автотесты
         # Для проектов на базе Selenide необходимо добавить параметр для запуска браузера
